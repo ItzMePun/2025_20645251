@@ -7,3 +7,11 @@
 *.o
 *.so
 build/
+.vs/
+bin/
+obj/
+out/
+dist/
+target/
+cmake-build-*/
+*.user
