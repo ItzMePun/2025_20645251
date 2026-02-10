@@ -16,7 +16,7 @@ int main( int argc, char *argv[] ) {
   ssa >> a;
   ssb >> b;
 
-  c = add(a + b);
+  c = add(a, b);
   std::cout << c;
 
   return 0;
