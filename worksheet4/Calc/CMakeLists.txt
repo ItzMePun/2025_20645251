@@ -2,7 +2,7 @@
 project( calc )
 add_library( maths adder.cpp )
 if (NOT BUILD_SHARED_LIBS )
-add_definitions( -Dmaths_DYNAMIC )
+add_definitions( -Dmaths_STATIC )
 endif()
 
 add_executable( calc calc.cpp )
