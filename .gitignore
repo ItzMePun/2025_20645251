@@ -5,6 +5,7 @@
 *.obj
 *.zip
 *.lib
+lib/
 *.exp
 *.o
 *.so
