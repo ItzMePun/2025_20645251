@@ -15,6 +15,8 @@ qt_add_executable(worksheet6_application
     ModelPart.cpp
     ModelPartList.h
     ModelPartList.cpp
+    icons.qrc
+
 )
 
 target_link_libraries(worksheet6_application
