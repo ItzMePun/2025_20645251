@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "ModelPartList.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -21,6 +22,7 @@ class MainWindow : public QMainWindow
 
     private:
         Ui::MainWindow *ui;
+        ModelPartList* partList;
 
     signals:
         void statusUpdateMessage(const QString & message, int timeout);
