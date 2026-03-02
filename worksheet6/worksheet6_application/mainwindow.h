@@ -13,13 +13,17 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
-    void handleButton();
+    public:
+        MainWindow(QWidget *parent = nullptr);
+        ~MainWindow();
+        void handleRightButton();
+        void handleLeftButton();
 
-private:
-    Ui::MainWindow *ui;
+    private:
+        Ui::MainWindow *ui;
+
+    signals:
+        void statusUpdateMessage(const QString & message, int timeout);
 };
 
 #endif // MAINWINDOW_H
