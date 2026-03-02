@@ -19,6 +19,7 @@ class MainWindow : public QMainWindow
         ~MainWindow();
         void handleRightButton();
         void handleLeftButton();
+        void handleTreeViewClick();
 
     private:
         Ui::MainWindow *ui;

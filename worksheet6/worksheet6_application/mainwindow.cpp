@@ -11,7 +11,9 @@ MainWindow::MainWindow(QWidget *parent)
     //Connect Buttons to Handlers
     connect(ui->RightButton, &QPushButton::released, this, &MainWindow::handleRightButton);
     connect(ui->LeftButton, &QPushButton::released, this, &MainWindow::handleLeftButton);
-    
+
+    connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::handleTreeViewClick);
+
     //Connect Button Handlers to Status Update
 	connect(this, &MainWindow::statusUpdateMessage, ui->statusbar, &QStatusBar::showMessage);
 
@@ -55,8 +57,13 @@ void MainWindow::handleRightButton()
 
 void MainWindow::handleLeftButton()
 {
-    //QMessageBox msgBox;
-    //msgBox.setText("Button was clicked!");
-    //msgBox.exec();
     emit statusUpdateMessage(QString("Left Button was clicked"), 0);
+}
+
+void MainWindow::handleTreeViewClick()
+{
+    QModelIndex index = ui->treeView->currentIndex();
+    ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
+    QString text = selectedPart->data(0).toString();
+    emit statusUpdateMessage(QString("The selected item is: ")+text, 0);
 }
