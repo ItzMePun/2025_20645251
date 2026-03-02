@@ -16,6 +16,7 @@ qt_add_executable(worksheet6_application
     ModelPartList.h
     ModelPartList.cpp
     icons.qrc
+    optiondialog.h optiondialog.cpp optiondialog.ui
 
 )
 

@@ -13,6 +13,7 @@
 #include <QString>
 #include <QList>
 #include <QVariant>
+#include <QColor>
 
 /* VTK headers - will be needed when VTK used in next worksheet,
  * commented out for now
@@ -91,26 +92,6 @@ public:
       */
     int row() const;
 
-
-    /** Set colour
-      * (0-255 RGB values as ints)
-      */
-    void setColour(const unsigned char R, const unsigned char G, const unsigned char B);
-
-    unsigned char getColourR();
-    unsigned char getColourG();
-    unsigned char getColourB();
-
-    /** Set visible flag
-      * @param isVisible sets visible/non-visible
-      */
-    void setVisible(bool isVisible);
-
-    /** Get visible flag
-      * @return visible flag as boolean 
-      */
-    bool visible();
-	
 	/** Load STL file
       * @param fileName
       */
@@ -134,7 +115,6 @@ private:
     /* These are some typical properties that I think the part will need, you might
      * want to add you own.
      */
-    bool                                        isVisible;          /**< True/false to indicate if should be visible in model rendering */
 	
 	/* These are vtk properties that will be used to load/render a model of this part,
 	 * commented out for now but will be used later

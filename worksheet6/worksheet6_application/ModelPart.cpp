@@ -19,9 +19,9 @@
 
 
 ModelPart::ModelPart(const QList<QVariant>& data, ModelPart* parent )
-    : m_itemData(data), m_parentItem(parent) {
+    : m_itemData(data), m_parentItem(parent)
+{
 
-    /* You probably want to give the item a default colour */
 }
 
 
@@ -93,48 +93,6 @@ int ModelPart::row() const {
     if (m_parentItem)
         return m_parentItem->m_childItems.indexOf(const_cast<ModelPart*>(this));
     return 0;
-}
-
-void ModelPart::setColour(const unsigned char R, const unsigned char G, const unsigned char B) {
-    /* This is a placeholder function that you will need to modify if you want to use it */
-    
-    /* As the name suggests ... */
-}
-
-unsigned char ModelPart::getColourR() {
-    /* This is a placeholder function that you will need to modify if you want to use it */
-    
-    /* As the name suggests ... */
-    return 0;   // needs updating
-}
-
-unsigned char ModelPart::getColourG() {
-    /* This is a placeholder function that you will need to modify if you want to use it */
-    
-    /* As the name suggests ... */
-    return 0;   // needs updating
-}
-
-
-unsigned char ModelPart::getColourB() {
-   /* This is a placeholder function that you will need to modify if you want to use it */
-    
-    /* As the name suggests ... */
-    return 0;   // needs updating
-}
-
-
-void ModelPart::setVisible(bool isVisible) {
-    /* This is a placeholder function that you will need to modify if you want to use it */
-    
-    /* As the name suggests ... */
-}
-
-bool ModelPart::visible() {
-    /* This is a placeholder function that you will need to modify if you want to use it */
-    
-    /* As the name suggests ... */
-    return false;
 }
 
 void ModelPart::loadSTL( QString fileName ) {

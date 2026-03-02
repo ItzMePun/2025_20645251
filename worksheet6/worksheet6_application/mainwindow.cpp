@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <qmessagebox.h>
+#include <qfiledialog.h>
+#include "optiondialog.h"
+#include <QColor>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -10,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //Connect Buttons to Handlers
     connect(ui->RightButton, &QPushButton::released, this, &MainWindow::handleRightButton);
-    connect(ui->LeftButton, &QPushButton::released, this, &MainWindow::handleLeftButton);
+    connect(ui->OptionDialogButton, &QPushButton::released, this, &MainWindow::handleLaunchDialogButton);
 
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::handleTreeViewClick);
 
@@ -26,20 +29,23 @@ MainWindow::MainWindow(QWidget *parent)
     {
         QString name = QString("TopLevel %1").arg(i);
         QString visible("true");
+        QColor color(0, 0 ,0);
 
-        ModelPart* childItem = new ModelPart({ name, visible });
+        ModelPart* childItem = new ModelPart({ name, visible, color });
         rootItem->appendChild(childItem);
 
         for (int j = 0; j < 5; j++)
         {
             QString name = QString("Item %1,%2").arg(i).arg(j);
             QString visible("true");
+            QColor color(0, 0 ,0);
 
-            ModelPart* childChildItem = new ModelPart({ name, visible });
+            ModelPart* childChildItem = new ModelPart({ name, visible, color });
             childItem->appendChild(childChildItem);
         }
     }
 
+    ui->treeView->addAction( ui->actionItem_options );
 }
 
 MainWindow::~MainWindow()
@@ -49,15 +55,40 @@ MainWindow::~MainWindow()
 
 void MainWindow::handleRightButton()
 {
-    //QMessageBox msgBox;
-    //msgBox.setText("Button was clicked!");
-    //msgBox.exec();
     emit statusUpdateMessage(QString("Right Button was clicked"), 0);
 }
 
-void MainWindow::handleLeftButton()
+void MainWindow::handleLaunchDialogButton()
 {
-    emit statusUpdateMessage(QString("Left Button was clicked"), 0);
+    QModelIndex index = ui->treeView->currentIndex();
+    if (!index.isValid())
+    {
+        emit statusUpdateMessage(QString("No item selected"), 0);
+        return;
+    }
+    ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
+    QString name = selectedPart->data(0).toString();
+    QString visible = selectedPart->data(1).toString();
+    
+    // Pass the data to the dialog
+    optionDialog dialog(this, selectedPart);
+    
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        // Update the model part with new data from dialog
+        selectedPart->set(0, dialog.getName());
+        selectedPart->set(1, dialog.getVisible());
+        selectedPart->set(2, dialog.getColor());
+        
+        // Notify the model that data has changed
+        this->partList->dataChanged(index, index);
+        
+        emit statusUpdateMessage(QString("Dialog Accepted - Changes Applied"), 0);
+    }
+    else
+    {
+        emit statusUpdateMessage(QString("Dialog Rejected"), 0);
+    }
 }
 
 void MainWindow::handleTreeViewClick()
@@ -70,6 +101,24 @@ void MainWindow::handleTreeViewClick()
 
 void MainWindow::on_actionOpen_File_triggered()
 {
-    emit statusUpdateMessage(QString("Openfile has been selected"), 0);
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "C:\\", tr("STL Files(*.stl);;Text Files(*.txt)"));
+    emit statusUpdateMessage(QString("Openfile has been selected, choosing file")+fileName, 0);
+
+    QModelIndex index = ui->treeView->currentIndex();
+    ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
+    selectedPart->set(0, fileName);
+}
+
+
+void MainWindow::on_actionSave_File_triggered()
+{
+    emit statusUpdateMessage(QString("Save File has been selected"), 0);
+}
+
+
+
+void MainWindow::on_actionItem_options_triggered()
+{
+    handleLaunchDialogButton();
 }
 

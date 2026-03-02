@@ -27,9 +27,11 @@ class MainWindow : public QMainWindow
 
     public slots:
         void handleRightButton();
-        void handleLeftButton();
+        void handleLaunchDialogButton();
         void handleTreeViewClick();
         void on_actionOpen_File_triggered();
+        void on_actionSave_File_triggered();
+        void on_actionItem_options_triggered();
 };
 
 #endif // MAINWINDOW_H
