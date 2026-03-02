@@ -17,9 +17,6 @@ class MainWindow : public QMainWindow
     public:
         MainWindow(QWidget *parent = nullptr);
         ~MainWindow();
-        void handleRightButton();
-        void handleLeftButton();
-        void handleTreeViewClick();
 
     private:
         Ui::MainWindow *ui;
@@ -27,6 +24,12 @@ class MainWindow : public QMainWindow
 
     signals:
         void statusUpdateMessage(const QString & message, int timeout);
+
+    public slots:
+        void handleRightButton();
+        void handleLeftButton();
+        void handleTreeViewClick();
+        void on_actionOpen_File_triggered();
 };
 
 #endif // MAINWINDOW_H

@@ -67,3 +67,9 @@ void MainWindow::handleTreeViewClick()
     QString text = selectedPart->data(0).toString();
     emit statusUpdateMessage(QString("The selected item is: ")+text, 0);
 }
+
+void MainWindow::on_actionOpen_File_triggered()
+{
+    emit statusUpdateMessage(QString("Openfile has been selected"), 0);
+}
+
