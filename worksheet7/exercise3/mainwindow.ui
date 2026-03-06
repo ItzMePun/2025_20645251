@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
+     <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,5">
       <item>
        <widget class="QTreeView" name="treeView">
         <property name="contextMenuPolicy">
@@ -75,7 +75,7 @@
      <x>0</x>
      <y>0</y>
      <width>358</width>
-     <height>17</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

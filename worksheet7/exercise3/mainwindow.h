@@ -27,6 +27,9 @@ class MainWindow : public QMainWindow
     public:
         MainWindow(QWidget *parent = nullptr);
         ~MainWindow();
+        
+        void updateRender();
+        void updateRenderFromTree(const QModelIndex&);
 
     private:
         Ui::MainWindow *ui;

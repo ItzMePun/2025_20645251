@@ -108,6 +108,8 @@ void MainWindow::handleLaunchDialogButton()
         
         // Notify the model that data has changed
         this->partList->dataChanged(index, index);
+
+        updateRender();
         
         emit statusUpdateMessage(QString("Dialog Accepted - Changes Applied"), 0);
     }
@@ -128,17 +130,78 @@ void MainWindow::handleTreeViewClick()
 void MainWindow::on_actionOpen_File_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "C:\\", tr("STL Files(*.stl);;Text Files(*.txt)"));
+    
+    if (fileName.isEmpty())
+    {
+        emit statusUpdateMessage(QString("Openfile has been selected, operation cancelled"), 0);
+        return;
+    }
+    
     emit statusUpdateMessage(QString("Openfile has been selected, choosing file")+fileName, 0);
+
+    QModelIndex index = ui->treeView->currentIndex();
+    
+    if (!index.isValid())
+    {
+        emit statusUpdateMessage(QString("ERROR: No item selected in tree!"), 0);
+        return;
+    }
+
+    ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
 
     QString name = QString("New Unnamed Part");
     QString visible("true");
-    QColor color(0, 0 ,0);
+    QColor color(100, 0 ,0);
+
     ModelPart* newPart = new ModelPart({ fileName, visible, color });
 
-    QModelIndex index = ui->treeView->currentIndex();
-    ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
     selectedPart->appendChild(newPart);
     newPart->loadSTL(fileName);
+
+    updateRender();
+	ui->treeView->expand(index);
+    emit statusUpdateMessage(QString("New part added with ") + QString::number(selectedPart->childCount()) + QString(" children"), 0);
+}
+
+void MainWindow::updateRender()
+{
+	renderer->RemoveAllViewProps();
+
+    updateRenderFromTree(QModelIndex());
+    
+    renderer->ResetCamera();
+    renderer->GetActiveCamera()->Azimuth(30);
+    renderer->GetActiveCamera()->Elevation(30);
+    renderer->ResetCameraClippingRange();
+    renderWindow->Render();
+}
+
+void MainWindow::updateRenderFromTree(const QModelIndex& index)
+{
+    if (index.isValid())
+    {
+        ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
+        
+        if (selectedPart && (selectedPart->data(1).toString().compare("true", Qt::CaseInsensitive) == 0))
+        {
+            renderer->AddActor(selectedPart->getActor());
+        }
+    }
+
+    if (!partList->hasChildren(index) || (index.flags() & Qt::ItemNeverHasChildren))
+    {
+        return;
+    }
+
+	int rows = partList->rowCount(index);
+    for (int i = 0; i < rows; i++)
+    {
+        QModelIndex child = partList->index(i, 0, index);
+        if (child.isValid())
+        {
+            updateRenderFromTree(child);
+        }
+    }
 }
 
 
