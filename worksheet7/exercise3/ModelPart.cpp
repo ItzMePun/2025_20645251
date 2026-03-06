@@ -100,7 +100,7 @@ int ModelPart::row() const {
 }
 
 void ModelPart::loadSTL( QString fileName ) {
-        
+    
     file->SetFileName(fileName.toStdString().c_str());
     file->Update();
         

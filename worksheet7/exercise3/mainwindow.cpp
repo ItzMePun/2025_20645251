@@ -130,7 +130,7 @@ void MainWindow::handleTreeViewClick()
 void MainWindow::on_actionOpen_File_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "C:\\", tr("STL Files(*.stl);;Text Files(*.txt)"));
-    
+
     if (fileName.isEmpty())
     {
         emit statusUpdateMessage(QString("Openfile has been selected, operation cancelled"), 0);
@@ -149,17 +149,24 @@ void MainWindow::on_actionOpen_File_triggered()
 
     ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
 
-    QString name = QString("New Unnamed Part");
+	QString name = QFileInfo(fileName).baseName();
     QString visible("true");
     QColor color(100, 0 ,0);
 
-    ModelPart* newPart = new ModelPart({ fileName, visible, color });
+    //ModelPart* newPart = new ModelPart({ name, visible, color });
+	QModelIndex newPartIndex = partList->appendChild(index, { name, visible, color });
+    ModelPart* newPart = static_cast<ModelPart*>(newPartIndex.internalPointer());
 
-    selectedPart->appendChild(newPart);
     newPart->loadSTL(fileName);
 
     updateRender();
+    renderer->ResetCamera();
+    renderer->GetActiveCamera()->Azimuth(30);
+    renderer->GetActiveCamera()->Elevation(30);
+    renderer->ResetCameraClippingRange();
 	ui->treeView->expand(index);
+	//ui->treeView->setCurrentIndex(newPartIndex);
+ //   this->partList->dataChanged(index, index);
     emit statusUpdateMessage(QString("New part added with ") + QString::number(selectedPart->childCount()) + QString(" children"), 0);
 }
 
@@ -169,10 +176,6 @@ void MainWindow::updateRender()
 
     updateRenderFromTree(QModelIndex());
     
-    renderer->ResetCamera();
-    renderer->GetActiveCamera()->Azimuth(30);
-    renderer->GetActiveCamera()->Elevation(30);
-    renderer->ResetCameraClippingRange();
     renderWindow->Render();
 }
 
